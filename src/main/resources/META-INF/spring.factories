@@ -1,0 +1,2 @@
+org.springframework.context.ApplicationContextInitializer=\
+com.cengo.muzayedebackendv2.config.properties.JsonPropertyConfig

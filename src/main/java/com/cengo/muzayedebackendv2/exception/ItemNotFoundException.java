@@ -1,0 +1,14 @@
+package com.cengo.muzayedebackendv2.exception;
+
+
+import com.cengo.muzayedebackendv2.exception.base.BaseException;
+import com.cengo.muzayedebackendv2.exception.message.BaseErrorMessage;
+import org.springframework.http.HttpStatus;
+
+public class ItemNotFoundException extends BaseException {
+
+    public ItemNotFoundException(BaseErrorMessage baseErrorMessage) {
+        super(HttpStatus.NOT_FOUND, baseErrorMessage);
+    }
+
+}

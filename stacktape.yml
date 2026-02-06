@@ -1,0 +1,58 @@
+resources:
+  webService:
+    type: web-service
+    properties:
+      connectTo:
+        - database
+        - bucket
+      resources:
+        instanceTypes:
+          - t2.micro
+      scaling:
+        minInstances: 1
+        maxInstances: 1
+      packaging:
+        type: custom-dockerfile
+        properties:
+          buildContextPath: ./
+          dockerfilePath: ./Dockerfile
+      environment:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+        - name: ENV_VARIABLES
+          value: $Secret('muzayede.ENV_VARIABLES')
+      customDomains:
+        - domainName: backend.upart.art
+      loadBalancing:
+        type: application-load-balancer
+
+  database:
+    type: relational-database
+    properties:
+      credentials:
+        masterUserName: postgres
+        masterUserPassword: $Secret('muzayede.DB')
+      engine:
+        type: postgres
+        properties:
+          dbName: muzayede
+          version: "16.3"
+          primaryInstance:
+            instanceSize: db.t4g.micro
+
+  bucket:
+    type: bucket
+    properties:
+      accessibility:
+        accessibilityMode: public-read
+      cdn:
+        enabled: true
+        customDomains:
+          - domainName: images.upart.art
+        routeRewrites:
+          - path: /*
+            routeTo:
+              type: bucket
+              properties:
+                bucketName: bucket
+                disableUrlNormalization: true
